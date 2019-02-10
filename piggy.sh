@@ -23,14 +23,30 @@ while read line; do
 	tempD=$((tempD+1))
 done < "$fileLocation"
 
-#2) run python script to generate new content of "/etc/hosts" file
-#newFileContent=$(python shield.py "$blockLocation" "$block" 2>&1)
-
-#3) write the required file in place of /etc/hosts
-if [ "$block" = "True" ]; then
-	cp /Users/vladimirantonov
+#2) check if there was a change of state and exit if it's the same
+lastState=$(cat -s ./lastState)
+if [ "$lastState" = "$block" ]; then
+	echo "no change - Blocakde: $block"
+	exit 1
 fi
-echo "vladimir" | sudo -S cp /Users/vladimirantonov/.scripts/block_on /etc/hosts
-#3) reload the file configuration
+
+#3) otherwise
+echo "$block" > /Users/vladimirantonov/.scripts/lastState
+#a) write the required file in place of /etc/hosts
+if [ "$block" = "True" ]; then
+	cp /Users/vladimirantonov/.scripts/block_on ./hosts
+else
+	cp /Users/vladimirantonov/.scripts/block_off ./hosts
+fi
+echo "vladimir" | sudo -S cp /Users/vladimirantonov/.scripts/hosts /etc/hosts
+#b) close safari and firefox
+fr
+killall firefox
+killall safari
+#c) reload the file configuration
 echo "vladimir" | sudo -S dscacheutil -flushcache
+echo "vladimir" | sudo -S killall -HUP mDNSResponder
+#d) reload safari and firefox
+open -a firefox
+#e) update the lastState file
 echo "Blockade is up: $block"
