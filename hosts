@@ -5,7 +5,7 @@
 # when the system is booting.  Do not change this entry.
 ##
 127.0.0.1	localhost
-#on
-127.0.0.1 www.youtube.com
+#off
+#127.0.0.1 www.youtube.com
 255.255.255.255	broadcasthost
 ::1             localhost 

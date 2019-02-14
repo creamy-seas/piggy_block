@@ -23,30 +23,33 @@ while read line; do
 	tempD=$((tempD+1))
 done < "$fileLocation"
 
-#2) check if there was a change of state and exit if it's the same
-lastState=$(cat -s ./lastState)
-if [ "$lastState" = "$block" ]; then
-	echo "no change - Blocakde: $block"
-	exit 1
-fi
-
-#3) otherwise
+#2) copt the files over and reload cache
 echo "$block" > /Users/vladimirantonov/.scripts/lastState
-#a) write the required file in place of /etc/hosts
 if [ "$block" = "True" ]; then
 	cp /Users/vladimirantonov/.scripts/block_on ./hosts
 else
 	cp /Users/vladimirantonov/.scripts/block_off ./hosts
 fi
 echo "vladimir" | sudo -S cp /Users/vladimirantonov/.scripts/hosts /etc/hosts
-#b) close safari and firefox
-fr
-killall firefox
-killall safari
-#c) reload the file configuration
 echo "vladimir" | sudo -S dscacheutil -flushcache
 echo "vladimir" | sudo -S killall -HUP mDNSResponder
-#d) reload safari and firefox
-open -a firefox
-#e) update the lastState file
-echo "Blockade is up: $block"
+
+#3) check if there was a change of state before reloading anything
+lastState=$(cat -s ./lastState)
+if [ "$lastState" != "$block" ]; then
+	if [ -n "$(launchctl list | grep firefox)" ]; then
+		echo "piggy ===> reloading firefox"
+		osascript -e 'quit app "firefox"'
+		sleep 1
+		osascript -e 'open app "firefox"'
+	fi
+	if [ -n "$(launchctl list | grep Safari.)" ]; then
+		echo "piggy ===> reloading safari"
+		osascript -e 'quit app "Safari"'
+		sleep 1
+		osascript -e 'open app "Safari"'	
+	fi 
+fi
+
+echo "piggy ===> Blockade is up: $block"
+#set browser.startup.page in about:config (in url) to 3
