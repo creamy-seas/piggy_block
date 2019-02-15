@@ -1,6 +1,7 @@
 #!/bin/bash
-logFile="Users/vladimirantonov/.scripts/logFile"
+logFile="/Users/vladimirantonov/.scripts/log_piggy"
 fileLocation="/Users/vladimirantonov/Documents/maria_times.txt"
+lastStateFile="/Users/vladimirantonov/.scripts/lastState"
 blockLocation="/etc/hosts"
 block="True"
 
@@ -26,7 +27,7 @@ while read line; do
 done < "$fileLocation"
 
 #2) copt the files over and reload cache
-lastState=$(cat -s ./lastState)
+lastState=$(cat -s "$lastStateFile")
 echo "Last state    : $lastState" >> "$logFile"
 echo "Required state: $block" >> "$logFile"
 echo "$block" > /Users/vladimirantonov/.scripts/lastState
@@ -37,7 +38,7 @@ else
 	cp /Users/vladimirantonov/.scripts/block_off ./hosts
 	echo "> copying UNBLOCK file to /etc/hosts" >> "$logFile"
 fi
-echo "vladimir" | sudo -S cp /Users/vladimirantonov/.scripts/hosts /etc/hosts
+echo "vladimir" | sudo -S mv /Users/vladimirantonov/.scripts/hosts /etc/hosts
 echo "vladimir" | sudo -S dscacheutil -flushcache
 echo "vladimir" | sudo -S killall -HUP mDNSResponder
 #3) check if there was a change of state before reloading anything
@@ -59,6 +60,6 @@ if [ "$lastState" != "$block" ]; then
 fi
 
 echo "piggy ===> Blockade is up: $block"
-echo "$block" > lastState
+echo "$block" > "$lastStateFile"
 echo "Last state    : $block\n" >> "$logFile"
 #set browser.startup.page in about:config (in url) to 3
