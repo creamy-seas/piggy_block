@@ -1,5 +1,7 @@
 #!/bin/bash
-#function checks input for "True" of "False" -> blocks or unblocks are required by copying file and flushing cache
+#This function recieves "True" or "False" as inputs
+#Copies the required block domain file to /etc/hosts and flushes the cache
+
 logFile="/Users/vladimirantonov/.scripts/log_piggy"
 blockFile="/Users/vladimirantonov/.scripts/block_on"
 unblockFile="/Users/vladimirantonov/.scripts/block_off"
