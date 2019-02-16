@@ -21,10 +21,10 @@ fi
 cd /Users/vladimirantonov/pepe
 while read line; do
 	/usr/local/bin/youtube-dl -o "%(title)s.%(ext)s" -i -f "best[ext=mp4]/best[filesize<200M]" "$line"
-done < "$videoFileLocation" 2>>"$youtubeLog"
+done < "$videoFileLocation" 2>>"$youtube_log"
 
 #4) get the last line
-	/usr/local/bin/youtube-dl -o "%(title)s.%(ext)s" -i -f "best[ext=m4a]/best[filesize<200M]" "$(tail -n 1 "$videoFileLocation")" 2>>"$youtubeLog"
+	/usr/local/bin/youtube-dl -o "%(title)s.%(ext)s" -i -f "best[ext=m4a]/best[filesize<200M]" "$(tail -n 1 "$videoFileLocation")" 2>"$youtube_log"
 
 #5) replace block by changing the lastState variable - piggy.sh will deal with this change
 if [ "$lastState" = "True" ]; then
