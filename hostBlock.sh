@@ -14,6 +14,8 @@ else
         echo "> copying UNBLOCK file to /etc/hosts" >> "$logFile"
 fi
 
-echo "vladimir" | sudo -S mv /tmp/hosts /etc/hosts && echo "> copied" >> "$logFile"
+echo "vladimir" | sudo -S mv /tmp/hosts /etc/hosts 
+a=$(cat /etc/hosts | grep youtube)
+echo "> wrote \""$a"\"" >> "$logFile"
 echo "vladimir" | sudo -S dscacheutil -flushcache
-echo "vladimir" | sudo -S killall -HUP mDNSResponder
+echo "vladimir" | sudo -S killall -HUP mDNSResponder && echo "> flushed cache" >> "$logFile"
