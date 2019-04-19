@@ -2,7 +2,7 @@
 #This function recieves "True" or "False" as inputs
 #Copies the required block domain file to /etc/hosts and flushes the cache
 
-logFile="/Users/vladimirantonov/.scripts/log_piggy"
+logFile="/dev/null"#"/Users/vladimirantonov/.scripts/log_piggy"
 blockFile="/Users/vladimirantonov/.scripts/block_on"
 unblockFile="/Users/vladimirantonov/.scripts/block_off"
 

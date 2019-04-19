@@ -3,7 +3,7 @@
 #a refresh of the browsers is made
 
 timeFileLocation="/Users/vladimirantonov/Documents/maria_times.txt"
-logFile="/Users/vladimirantonov/.scripts/log_piggy"
+logFile="/dev/null"#"/Users/vladimirantonov/.scripts/log_piggy"
 lastStateFile="/Users/vladimirantonov/.scripts/lastState"
 block="True"
 
